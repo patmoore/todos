@@ -3,10 +3,11 @@ import { _ } from 'meteor/underscore';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
-
+import { ManagerType } from 'meteor/patmoore:meteor-collection-management';
 import { Todos } from './todos.js';
 import { Lists } from '../lists/lists.js';
 
+debugger;
 export const insert = new ValidatedMethod({
   name: 'todos.insert',
   validate: new SimpleSchema({
@@ -115,3 +116,14 @@ if (Meteor.isServer) {
     connectionId() { return true; },
   }, 5, 1000);
 }
+
+debugger;
+export const TodosManager = ManagerType.create({
+  callPrefix: 'todos',
+  meteorCallDefinitions: [
+    insert,
+    setCheckedStatus,
+    updateText,
+    remove
+  ]
+});
