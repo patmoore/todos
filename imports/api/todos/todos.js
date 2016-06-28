@@ -27,16 +27,15 @@ class TodosCollection extends Mongo.Collection {
   }
 }
 
-export const Todos = new TodosCollection('Todos');
-
+//export const Todos = new TodosCollection('Todos');
 // Deny all client-side updates since we will be using methods to manage this collection
-Todos.deny({
-  insert() { return true; },
-  update() { return true; },
-  remove() { return true; },
-});
+//Todos.deny({
+//  insert() { return true; },
+//  update() { return true; },
+//  remove() { return true; },
+//});
 
-Todos.schema = new SimpleSchema({
+var Todos_schema = new SimpleSchema({
   listId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
@@ -55,6 +54,12 @@ Todos.schema = new SimpleSchema({
     defaultValue: false,
   },
 });
+debugger;
+export const Todos = DbObjectType.create({
+    typeName: 'todos',
+    databaseTableName: 'todos',
+    properties: Todos_schema
+ });
 
 Todos.attachSchema(Todos.schema);
 
