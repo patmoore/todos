@@ -5,6 +5,7 @@ import faker from 'faker';
 import incompleteCountDenormalizer from './incompleteCountDenormalizer.js';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Lists } from '../lists/lists.js';
+import { DbObjectType } from 'meteor/patmoore:meteor-collection-management';
 
 class TodosCollection extends Mongo.Collection {
   insert(doc, callback) {
@@ -35,33 +36,32 @@ class TodosCollection extends Mongo.Collection {
 //  remove() { return true; },
 //});
 
-var Todos_schema = new SimpleSchema({
-  listId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    denyUpdate: true,
-  },
-  text: {
-    type: String,
-    max: 100,
-  },
-  createdAt: {
-    type: Date,
-    denyUpdate: true,
-  },
-  checked: {
-    type: Boolean,
-    defaultValue: false,
-  },
-});
-debugger;
+var todoProperties = {
+    listId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      denyUpdate: true,
+    },
+    text: {
+      type: String,
+      max: 100,
+    },
+    createdAt: {
+      type: Date,
+      denyUpdate: true,
+    },
+    checked: {
+      type: Boolean,
+      defaultValue: false,
+    },
+  };
 export const Todos = DbObjectType.create({
     typeName: 'todos',
     databaseTableName: 'todos',
-    properties: Todos_schema
+    properties: todoProperties
  });
 
-Todos.attachSchema(Todos.schema);
+//Todos.attachSchema(Todos.schema);
 
 // This represents the keys from Lists objects that should be published
 // to the client. If we add secret properties to List objects, don't list

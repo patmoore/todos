@@ -32,7 +32,7 @@ export const insert = new ValidatedMethod({
     Todos.insert(todo);
   },
 });
-
+debugger;
 export const setCheckedStatus = new ValidatedMethod({
   name: 'todos.makeChecked',
   validate: new SimpleSchema({

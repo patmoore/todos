@@ -1,7 +1,9 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Factory } from 'meteor/factory';
+import { DbObjectType } from 'meteor/patmoore:meteor-collection-management';
 import { Todos } from '../todos/todos.js';
+
 
 class ListsCollection extends Mongo.Collection {
   insert(list, callback) {
@@ -24,23 +26,27 @@ class ListsCollection extends Mongo.Collection {
     return super.remove(selector, callback);
   }
 }
+//
+//export const Lists = new ListsCollection('Lists');
+//
+//// Deny all client-side updates since we will be using methods to manage this collection
+//Lists.deny({
+//  insert() { return true; },
+//  update() { return true; },
+//  remove() { return true; },
+//});
+var listsProperties ={
+        name: { type: String },
+        incompleteCount: { type: Number, defaultValue: 0 },
+        userId: { type: String, regEx: SimpleSchema.RegEx.Id, optional: true },
+      };
 
-export const Lists = new ListsCollection('Lists');
-
-// Deny all client-side updates since we will be using methods to manage this collection
-Lists.deny({
-  insert() { return true; },
-  update() { return true; },
-  remove() { return true; },
+Lists = DbObjectType.create( {
+    typeName: 'lists',
+    databaseTableName: 'lists',
+    properties: listsProperties
 });
-
-Lists.schema = new SimpleSchema({
-  name: { type: String },
-  incompleteCount: { type: Number, defaultValue: 0 },
-  userId: { type: String, regEx: SimpleSchema.RegEx.Id, optional: true },
-});
-
-Lists.attachSchema(Lists.schema);
+//Lists.attachSchema(Lists_schema);
 
 // This represents the keys from Lists objects that should be published
 // to the client. If we add secret properties to List objects, don't list
